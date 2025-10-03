@@ -4,6 +4,7 @@ import LearningPaths from "./pages/LearningPaths";
 import StarterProjects from "./pages/StarterProjects";
 import ScapScanningGuide from "./pages/ScapScanningGuide";
 import PenTestingLabs from "./pages/PenTestingLabs";
+import CybersecurityFrameworks from "./pages/CybersecurityFrameworks";
 import Home from "./AppHome";
 
 export default function App() {
@@ -24,6 +25,7 @@ export default function App() {
         <Route path="/starter-projects" element={<StarterProjects />} />
         <Route path="/scap-scanning-guide" element={<ScapScanningGuide />} />
         <Route path="/pen-testing-labs" element={<PenTestingLabs />} />
+        <Route path="/cybersecurity-frameworks" element={<CybersecurityFrameworks />} />
       </Routes>
     </div>
   );

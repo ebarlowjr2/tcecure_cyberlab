@@ -10,6 +10,7 @@ const items: Item[] = [
   { title: "Starter Projects", blurb: "Small, portfolio-ready projects with prompts.", href: "/starter-projects" },
   { title: "Tool Sandboxes", blurb: "Hands-on practice environments (read-only demos).", href: "#" },
   { title: "Web Application Pen Testing", blurb: "Hands-on penetration testing labs for OWASP vulnerabilities.", href: "/pen-testing-labs" },
+  { title: "Cybersecurity Frameworks", blurb: "NIST CSF, ISO 27001, CIS Controls, and other industry standards.", href: "/cybersecurity-frameworks" },
   { title: "Careers & Certs", blurb: "Study guides for Sec+, CySA+, CEH, AZ-500, more.", href: "#" }
 ];
 
