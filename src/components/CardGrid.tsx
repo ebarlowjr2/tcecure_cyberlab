@@ -9,6 +9,7 @@ const items: Item[] = [
   { title: "CTFs & Challenges", blurb: "Weekly labs and mini-CTFs to build skills.", href: "#" },
   { title: "Starter Projects", blurb: "Small, portfolio-ready projects with prompts.", href: "/starter-projects" },
   { title: "Tool Sandboxes", blurb: "Hands-on practice environments (read-only demos).", href: "#" },
+  { title: "Web Application Pen Testing", blurb: "Hands-on penetration testing labs for OWASP vulnerabilities.", href: "/pen-testing-labs" },
   { title: "Careers & Certs", blurb: "Study guides for Sec+, CySA+, CEH, AZ-500, more.", href: "#" }
 ];
 
