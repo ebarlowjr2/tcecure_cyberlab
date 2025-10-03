@@ -66,7 +66,7 @@ export default function ScapScanningGuide() {
         <section>
           <Badge>Step-by-Step Guide</Badge>
           <h1 className="mt-4 text-4xl font-extrabold leading-tight md:text-5xl text-brand-neutral-50">
-            Running <span className="text-brand-accent">SCAP Scans</span> on Windows Server
+            Running <span className="text-brand-accent">scap scans</span> on Windows
           </h1>
           <p className="mt-4 max-w-3xl text-brand-neutral-200">
             Learn to perform security compliance scanning using SCAP (Security Content Automation Protocol) tools 

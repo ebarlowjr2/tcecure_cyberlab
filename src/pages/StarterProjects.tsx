@@ -50,7 +50,7 @@ const ProjectCard = ({ title, description, duration, difficulty, href }: {
 
 const projects = [
   {
-    title: "Running SCAP Scans",
+    title: "Running scap scans on Windows",
     description: "Learn to perform security compliance scanning using SCAP tools and interpret results for vulnerability assessment.",
     duration: "2-3 hours",
     difficulty: "Beginner",
