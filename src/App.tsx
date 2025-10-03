@@ -2,6 +2,7 @@ import { Routes, Route, Link } from "react-router-dom";
 import HowItWorks from "./pages/HowItWorks";
 import LearningPaths from "./pages/LearningPaths";
 import StarterProjects from "./pages/StarterProjects";
+import ScapScanningGuide from "./pages/ScapScanningGuide";
 import Home from "./AppHome";
 import tcecureLogo from "./assets/tcecure-logo.png";
 
@@ -27,6 +28,7 @@ export default function App() {
         <Route path="/how-it-works" element={<HowItWorks />} />
         <Route path="/learning-paths" element={<LearningPaths />} />
         <Route path="/starter-projects" element={<StarterProjects />} />
+        <Route path="/scap-scanning-guide" element={<ScapScanningGuide />} />
       </Routes>
     </div>
   );

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Badge = ({ children }: { children: React.ReactNode }) => (
   <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-brand-neutral-600 bg-brand-neutral-700/30 px-3 py-1 text-xs text-brand-neutral-100">
@@ -6,30 +7,54 @@ const Badge = ({ children }: { children: React.ReactNode }) => (
   </span>
 );
 
-const ProjectCard = ({ title, description, duration, difficulty }: { 
+const ProjectCard = ({ title, description, duration, difficulty, href }: { 
   title: string; 
   description: string; 
   duration: string; 
   difficulty: string; 
-}) => (
-  <div className="rounded-2xl border border-brand-neutral-600 bg-brand-card p-6 hover:bg-brand-neutral-700/40 hover:border-brand-accent/40 transition-all duration-200 hover:shadow-lg hover:shadow-brand-accent/10">
-    <div className="flex items-center justify-between mb-3">
-      <h3 className="text-xl font-semibold text-brand-accent">{title}</h3>
-      <span className="text-xs px-2 py-1 rounded-full bg-brand-accent/20 text-brand-accent font-medium">{difficulty}</span>
+  href?: string;
+}) => {
+  const cardContent = (
+    <>
+      <div className="flex items-center justify-between mb-3">
+        <h3 className="text-xl font-semibold text-brand-accent">{title}</h3>
+        <span className="text-xs px-2 py-1 rounded-full bg-brand-accent/20 text-brand-accent font-medium">{difficulty}</span>
+      </div>
+      <p className="text-brand-neutral-200 mb-4">{description}</p>
+      <div className="flex items-center justify-between">
+        <span className="text-sm text-brand-neutral-300">Duration: {duration}</span>
+        {href && (
+          <span className="text-brand-accent text-sm font-medium">View Guide →</span>
+        )}
+      </div>
+    </>
+  );
+
+  if (href) {
+    return (
+      <Link 
+        to={href}
+        className="block rounded-2xl border border-brand-neutral-600 bg-brand-card p-6 hover:bg-brand-neutral-700/40 hover:border-brand-accent/40 transition-all duration-200 hover:shadow-lg hover:shadow-brand-accent/10"
+      >
+        {cardContent}
+      </Link>
+    );
+  }
+
+  return (
+    <div className="rounded-2xl border border-brand-neutral-600 bg-brand-card p-6 hover:bg-brand-neutral-700/40 hover:border-brand-accent/40 transition-all duration-200 hover:shadow-lg hover:shadow-brand-accent/10">
+      {cardContent}
     </div>
-    <p className="text-brand-neutral-200 mb-4">{description}</p>
-    <div className="text-sm text-brand-neutral-300">
-      <span>Duration: {duration}</span>
-    </div>
-  </div>
-);
+  );
+};
 
 const projects = [
   {
     title: "Running SCAP Scans",
     description: "Learn to perform security compliance scanning using SCAP tools and interpret results for vulnerability assessment.",
     duration: "2-3 hours",
-    difficulty: "Beginner"
+    difficulty: "Beginner",
+    href: "/scap-scanning-guide"
   },
   {
     title: "STIG Remediation",
