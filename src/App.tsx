@@ -1,5 +1,7 @@
 import { Routes, Route, Link } from "react-router-dom";
 import HowItWorks from "./pages/HowItWorks";
+import LearningPaths from "./pages/LearningPaths";
+import StarterProjects from "./pages/StarterProjects";
 import Home from "./AppHome";
 
 export default function App() {
@@ -16,6 +18,8 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/how-it-works" element={<HowItWorks />} />
+        <Route path="/learning-paths" element={<LearningPaths />} />
+        <Route path="/starter-projects" element={<StarterProjects />} />
       </Routes>
     </div>
   );
