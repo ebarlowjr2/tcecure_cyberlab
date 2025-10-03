@@ -14,7 +14,7 @@ export default function App() {
           <img 
             src={tcecureLogo} 
             alt="TCecure Cyber Lab" 
-            className="h-8 w-auto"
+            className="h-12 w-auto"
           />
         </Link>
         <nav className="flex gap-3">
