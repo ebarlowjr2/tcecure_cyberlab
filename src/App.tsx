@@ -5,6 +5,11 @@ import StarterProjects from "./pages/StarterProjects";
 import ScapScanningGuide from "./pages/ScapScanningGuide";
 import PenTestingLabs from "./pages/PenTestingLabs";
 import CybersecurityFrameworks from "./pages/CybersecurityFrameworks";
+import LoginBypassLab from "./pages/LoginBypassLab";
+import XSSLab from "./pages/XSSLab";
+import IDORLab from "./pages/IDORLab";
+import PriceTamperingLab from "./pages/PriceTamperingLab";
+import JWTLab from "./pages/JWTLab";
 import Home from "./AppHome";
 
 export default function App() {
@@ -26,6 +31,11 @@ export default function App() {
         <Route path="/scap-scanning-guide" element={<ScapScanningGuide />} />
         <Route path="/pen-testing-labs" element={<PenTestingLabs />} />
         <Route path="/cybersecurity-frameworks" element={<CybersecurityFrameworks />} />
+        <Route path="/lab/login-bypass-sqli" element={<LoginBypassLab />} />
+        <Route path="/lab/stored-reflected-xss" element={<XSSLab />} />
+        <Route path="/lab/idor-rest-endpoints" element={<IDORLab />} />
+        <Route path="/lab/price-quantity-tampering" element={<PriceTamperingLab />} />
+        <Route path="/lab/jwt-cookie-manipulation" element={<JWTLab />} />
       </Routes>
     </div>
   );
