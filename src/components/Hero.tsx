@@ -32,12 +32,17 @@ export default function Hero() {
 
       <div className="rounded-2xl border border-brand-neutral-600 bg-gradient-to-b from-brand-neutral-700/50 to-brand-neutral-800/30 p-6 shadow-xl">
         <div className="grid grid-cols-2 gap-4">
-          {["Ticket","Plan","Test","PR"].map((step,i)=>(
+          {[
+            { title: "Request Access", desc: "Join the TCecure Cyber Lab community and start your cybersecurity journey." },
+            { title: "Contribute a Project", desc: "Share your expertise by contributing labs, tools, or educational content." },
+            { title: "Get Involved", desc: "Connect with peers, mentors, and industry professionals in our community." },
+            { title: "Learn More", desc: "Explore our comprehensive resources and hands-on learning opportunities." }
+          ].map((item,i)=>(
             <div key={i} className="rounded-xl bg-brand-neutral-700/40 border border-brand-neutral-600/50 p-4 hover:bg-brand-neutral-600/40 hover:border-brand-accent/30 transition-all duration-200 hover:shadow-lg hover:shadow-brand-accent/10">
               <div className="text-xs text-brand-neutral-300">Step {i+1}</div>
-              <div className="mt-1 font-semibold text-brand-neutral-50">{step}</div>
+              <div className="mt-1 font-semibold text-brand-neutral-50">{item.title}</div>
               <div className="mt-2 text-xs text-brand-neutral-300">
-                Placeholder copy for a simple four-step flow card.
+                {item.desc}
               </div>
             </div>
           ))}
