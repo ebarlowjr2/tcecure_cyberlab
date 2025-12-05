@@ -1,7 +1,6 @@
 import Hero from "./components/Hero";
 import CardGrid from "./components/CardGrid";
 import Footer from "./components/Footer";
-import CyberLabMap from "./components/CyberLabMap";
 
 export default function AppHome() {
   return (
@@ -11,9 +10,6 @@ export default function AppHome() {
       <main className="container mx-auto px-6">
         <Hero />
         <CardGrid />
-        <section style={{ marginTop: "3rem", marginBottom: "3rem" }}>
-          <CyberLabMap />
-        </section>
       </main>
 
       <Footer />

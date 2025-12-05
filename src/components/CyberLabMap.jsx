@@ -213,7 +213,7 @@ export default function CyberLabMap() {
             onClick={() => handleZoneClick(zone)}
           >
             <div className="cl-zone-header">
-              <span className="cl-zone-vlan">{zone.vlan}</span>
+              <span className="cl-zone-vlan">{zone.name}</span>
               <h3 className="cl-zone-title">{zone.name}</h3>
             </div>
             <p className="cl-zone-role">{zone.role}</p>
@@ -243,7 +243,7 @@ export default function CyberLabMap() {
           >
             <div className="cl-modal-header">
               <div>
-                <span className="cl-zone-vlan">{activeZone.vlan}</span>
+                <span className="cl-zone-vlan">{activeZone.name}</span>
                 <h3 className="cl-zone-title">{activeZone.name}</h3>
               </div>
               <button className="cl-modal-close" onClick={closeModal}>
