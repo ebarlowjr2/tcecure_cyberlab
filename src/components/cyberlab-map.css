@@ -287,3 +287,235 @@
 .cl-modal-items {
   margin-top: 0.25rem;
 }
+
+/* Network Diagram Layout */
+.cl-diagram {
+  position: relative;
+  width: 100%;
+  min-height: 700px;
+  margin-top: 1rem;
+}
+
+.cl-diagram-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.cl-connector {
+  stroke: #64748b;
+  stroke-width: 2;
+  fill: none;
+}
+
+.cl-diagram-nodes {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  padding-top: 1rem;
+}
+
+/* Internet and Router nodes */
+.cl-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.9));
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  border-radius: 12px;
+  color: #e5e7eb;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.cl-node-icon {
+  font-size: 1.5rem;
+}
+
+.cl-node-desc {
+  font-size: 0.7rem;
+  color: #9ca3af;
+}
+
+.cl-node-internet {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(30, 64, 175, 0.4));
+  border-color: rgba(59, 130, 246, 0.6);
+}
+
+.cl-node-router {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(22, 163, 74, 0.3));
+  border-color: rgba(34, 197, 94, 0.5);
+}
+
+/* Zone rows */
+.cl-zones-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.cl-zones-top {
+  margin-top: 1.5rem;
+}
+
+.cl-zones-bottom {
+  margin-top: 1.5rem;
+}
+
+/* Zone groups */
+.cl-zone-group {
+  flex: 1;
+  min-width: 200px;
+  max-width: 280px;
+  padding: 0.75rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.cl-zone-group:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+}
+
+/* Zone colors */
+.cl-zone-green {
+  background: rgba(34, 197, 94, 0.15);
+  border: 2px solid rgba(34, 197, 94, 0.6);
+}
+
+.cl-zone-blue {
+  background: rgba(59, 130, 246, 0.15);
+  border: 2px solid rgba(59, 130, 246, 0.6);
+}
+
+.cl-zone-cyan {
+  background: rgba(6, 182, 212, 0.15);
+  border: 2px solid rgba(6, 182, 212, 0.6);
+}
+
+.cl-zone-pink {
+  background: rgba(236, 72, 153, 0.15);
+  border: 2px solid rgba(236, 72, 153, 0.6);
+}
+
+.cl-zone-red {
+  background: rgba(239, 68, 68, 0.15);
+  border: 2px solid rgba(239, 68, 68, 0.6);
+}
+
+.cl-zone-orange {
+  background: rgba(249, 115, 22, 0.15);
+  border: 2px solid rgba(249, 115, 22, 0.6);
+}
+
+/* Zone label */
+.cl-zone-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.cl-zone-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #f1f5f9;
+}
+
+.cl-zone-vlan-tag {
+  font-size: 0.65rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Node boxes inside zones */
+.cl-zone-nodes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.cl-node-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.4rem 0.6rem;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  border-radius: 6px;
+}
+
+.cl-node-box.cl-planned {
+  border-style: dashed;
+  opacity: 0.8;
+}
+
+.cl-node-box-name {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #e5e7eb;
+}
+
+.cl-node-box-desc {
+  font-size: 0.65rem;
+  color: #9ca3af;
+}
+
+/* Info box */
+.cl-info-box {
+  flex: 1;
+  min-width: 200px;
+  max-width: 280px;
+  padding: 0.75rem;
+}
+
+.cl-info-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin-bottom: 0.5rem;
+}
+
+.cl-info-text {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  line-height: 1.5;
+}
+
+/* Responsive - hide SVG on mobile, stack zones */
+@media (max-width: 768px) {
+  .cl-diagram-lines {
+    display: none;
+  }
+
+  .cl-diagram {
+    min-height: auto;
+  }
+
+  .cl-zones-row {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cl-zone-group,
+  .cl-info-box {
+    max-width: 100%;
+    width: 100%;
+  }
+}
