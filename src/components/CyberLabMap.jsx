@@ -198,20 +198,24 @@ export default function CyberLabMap() {
 
       {/* Network Diagram */}
       <div className="cl-diagram">
-        <svg className="cl-diagram-lines" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid meet">
+        <svg className="cl-diagram-lines" viewBox="0 0 1200 900" preserveAspectRatio="xMidYMid meet">
           <defs>
             <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
               <polygon points="0 0, 10 3.5, 0 7" fill="#64748b" />
             </marker>
           </defs>
+          {/* Internet to Router */}
           <line x1="600" y1="45" x2="600" y2="95" className="cl-connector" markerEnd="url(#arrowhead)" />
-          <line x1="600" y1="155" x2="150" y2="245" className="cl-connector" markerEnd="url(#arrowhead)" />
-          <line x1="600" y1="155" x2="400" y2="245" className="cl-connector" markerEnd="url(#arrowhead)" />
-          <line x1="600" y1="155" x2="650" y2="245" className="cl-connector" markerEnd="url(#arrowhead)" />
-          <line x1="600" y1="155" x2="900" y2="245" className="cl-connector" markerEnd="url(#arrowhead)" />
-          <line x1="600" y1="155" x2="1050" y2="245" className="cl-connector" markerEnd="url(#arrowhead)" />
-          <line x1="600" y1="155" x2="300" y2="545" className="cl-connector" markerEnd="url(#arrowhead)" />
-          <line x1="600" y1="155" x2="750" y2="545" className="cl-connector" markerEnd="url(#arrowhead)" />
+          {/* Router to Management */}
+          <line x1="600" y1="155" x2="600" y2="220" className="cl-connector" markerEnd="url(#arrowhead)" />
+          {/* Management to other zones (row 1) */}
+          <line x1="600" y1="320" x2="200" y2="400" className="cl-connector" markerEnd="url(#arrowhead)" />
+          <line x1="600" y1="320" x2="450" y2="400" className="cl-connector" markerEnd="url(#arrowhead)" />
+          <line x1="600" y1="320" x2="750" y2="400" className="cl-connector" markerEnd="url(#arrowhead)" />
+          <line x1="600" y1="320" x2="1000" y2="400" className="cl-connector" markerEnd="url(#arrowhead)" />
+          {/* Management to bottom row zones */}
+          <line x1="600" y1="320" x2="350" y2="650" className="cl-connector" markerEnd="url(#arrowhead)" />
+          <line x1="600" y1="320" x2="850" y2="650" className="cl-connector" markerEnd="url(#arrowhead)" />
         </svg>
 
         <div className="cl-diagram-nodes">
@@ -226,8 +230,32 @@ export default function CyberLabMap() {
             <span className="cl-node-desc">Router / Firewall / UniFi Controller</span>
           </div>
 
+          {/* Management Zone - standalone above others */}
+          {zones.filter(z => z.id === 'mgmt').map((zone) => (
+            <div
+              key={zone.id}
+              className={`cl-zone-group cl-zone-${zone.color} cl-zone-management`}
+              onClick={() => handleZoneClick(zone)}
+            >
+              <div className="cl-zone-label">
+                <span className="cl-zone-name">{zone.name}</span>
+                <span className="cl-zone-vlan-tag">{zone.purpose}</span>
+              </div>
+              <div className="cl-zone-nodes">
+                {zone.items.map((item, idx) => (
+                  <div key={idx} className={`cl-node-box ${item.planned ? 'cl-planned' : ''}`}>
+                    <span className="cl-node-box-name">{item.name}</span>
+                    {item.desc && <span className="cl-node-box-desc">{item.desc}</span>}
+                    {item.planned && <span className="cl-badge-planned">Planned</span>}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+
+          {/* Other zones - first row (ACS, LMS, Production, VPN) */}
           <div className="cl-zones-row cl-zones-top">
-            {zones.slice(0, 4).map((zone) => (
+            {zones.filter(z => z.id !== 'mgmt' && z.id !== 'range').map((zone) => (
               <div
                 key={zone.id}
                 className={`cl-zone-group cl-zone-${zone.color}`}
@@ -250,8 +278,9 @@ export default function CyberLabMap() {
             ))}
           </div>
 
+          {/* Bottom row - Cyber Range and Info Box */}
           <div className="cl-zones-row cl-zones-bottom">
-            {zones.slice(4).map((zone) => (
+            {zones.filter(z => z.id === 'range').map((zone) => (
               <div
                 key={zone.id}
                 className={`cl-zone-group cl-zone-${zone.color}`}

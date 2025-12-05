@@ -292,7 +292,7 @@
 .cl-diagram {
   position: relative;
   width: 100%;
-  min-height: 700px;
+  min-height: 800px;
   margin-top: 1rem;
 }
 
@@ -419,6 +419,12 @@
 .cl-zone-orange {
   background: rgba(249, 115, 22, 0.15);
   border: 2px solid rgba(249, 115, 22, 0.6);
+}
+
+/* Management zone - centered above others */
+.cl-zone-management {
+  max-width: 320px;
+  margin: 0 auto;
 }
 
 /* Zone label */
