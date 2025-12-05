@@ -199,22 +199,17 @@ export default function CyberLabMap() {
       {/* Network Diagram */}
       <div className="cl-diagram">
         <svg className="cl-diagram-lines" viewBox="0 0 1200 900" preserveAspectRatio="xMidYMid meet">
-          <defs>
-            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-              <polygon points="0 0, 10 3.5, 0 7" fill="#64748b" />
-            </marker>
-          </defs>
           {/* Internet to Router */}
-          <line x1="600" y1="98" x2="600" y2="129" className="cl-connector" markerEnd="url(#arrowhead)" />
+          <line x1="600" y1="98" x2="600" y2="129" className="cl-connector" />
           {/* Router to Management */}
-          <line x1="600" y1="232" x2="600" y2="263" className="cl-connector" markerEnd="url(#arrowhead)" />
+          <line x1="600" y1="232" x2="600" y2="263" className="cl-connector" />
           {/* Management to other zones (row 1) */}
-          <line x1="600" y1="445" x2="225" y2="499" className="cl-connector" markerEnd="url(#arrowhead)" />
-          <line x1="600" y1="445" x2="475" y2="499" className="cl-connector" markerEnd="url(#arrowhead)" />
-          <line x1="600" y1="445" x2="725" y2="499" className="cl-connector" markerEnd="url(#arrowhead)" />
-          <line x1="600" y1="445" x2="975" y2="499" className="cl-connector" markerEnd="url(#arrowhead)" />
+          <line x1="600" y1="445" x2="225" y2="499" className="cl-connector" />
+          <line x1="600" y1="445" x2="475" y2="499" className="cl-connector" />
+          <line x1="600" y1="445" x2="725" y2="499" className="cl-connector" />
+          <line x1="600" y1="445" x2="975" y2="499" className="cl-connector" />
           {/* Management to bottom row zones */}
-          <line x1="600" y1="445" x2="475" y2="789" className="cl-connector" markerEnd="url(#arrowhead)" />
+          <line x1="600" y1="445" x2="475" y2="789" className="cl-connector" />
         </svg>
 
         <div className="cl-diagram-nodes">
