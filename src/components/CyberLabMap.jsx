@@ -5,7 +5,7 @@ const currentZones = [
   {
     id: "mgmt",
     name: "Management / Infrastructure",
-    vlan: "VLAN 10",
+    purpose: "Core Infrastructure",
     color: "green",
     role: "Core compute and platform management.",
     items: [
@@ -14,11 +14,11 @@ const currentZones = [
     ],
   },
   {
-    id: "dev",
-    name: "Dev / ACS Zone",
-    vlan: "VLAN 20",
+    id: "acs",
+    name: "Alpha Centauri Sandbox",
+    purpose: "Development & Testing",
     color: "blue",
-    role: "Development, ACS services, and lab workstations.",
+    role: "ACS services, development, and lab workstations.",
     items: [
       { name: "ACS Services", desc: "APIs, services" },
       { name: "Guacamole", desc: "Remote Access Jump Host" },
@@ -27,8 +27,8 @@ const currentZones = [
   },
   {
     id: "lms",
-    name: "LMS Zone",
-    vlan: "VLAN 30",
+    name: "LMS",
+    purpose: "Learning Management System",
     color: "cyan",
     role: "Learning Management System and course delivery.",
     items: [
@@ -38,10 +38,10 @@ const currentZones = [
   },
   {
     id: "prod",
-    name: "Production Zone",
-    vlan: "VLAN 40",
+    name: "Production",
+    purpose: "Client Delivery / Lab Operations",
     color: "pink",
-    role: "Production-like environment for customer / enterprise simulation.",
+    role: "Client delivery and lab operations environment.",
     items: [
       { name: "Active Directory", desc: "& DNS" },
       { name: "File / App Server", desc: "" },
@@ -50,8 +50,8 @@ const currentZones = [
   },
   {
     id: "vpn",
-    name: "VPN Access Zone",
-    vlan: "VLAN 60",
+    name: "VPN Access",
+    purpose: "Remote Access",
     color: "red",
     role: "Remote access into the lab via WireGuard.",
     items: [
@@ -60,12 +60,12 @@ const currentZones = [
   },
   {
     id: "range",
-    name: "Cyber Range",
-    vlan: "VLAN 50",
+    name: "OpenStack Cyber Range",
+    purpose: "Cyber Range Environment",
     color: "orange",
-    role: "Future OpenStack-backed ephemeral cyber ranges.",
+    role: "OpenStack-backed ephemeral cyber ranges.",
     items: [
-      { name: "OpenStack Cyber Range", desc: "", planned: true },
+      { name: "OpenStack Cyber Range", desc: "" },
     ],
   },
 ];
@@ -74,7 +74,7 @@ const futureZones = [
   {
     id: "mgmt",
     name: "Management / Infrastructure",
-    vlan: "VLAN 10",
+    purpose: "Core Infrastructure",
     color: "green",
     role: "Core compute, shared storage, and platform management.",
     items: [
@@ -85,11 +85,11 @@ const futureZones = [
     ],
   },
   {
-    id: "dev",
-    name: "Dev / ACS Zone",
-    vlan: "VLAN 20",
+    id: "acs",
+    name: "Alpha Centauri Sandbox",
+    purpose: "Development & Testing",
     color: "blue",
-    role: "Development, ACS services, and pre-production testing.",
+    role: "ACS services, development, and pre-production testing.",
     items: [
       { name: "ACS Services", desc: "APIs, services" },
       { name: "Guacamole", desc: "Remote Access Jump Host" },
@@ -98,8 +98,8 @@ const futureZones = [
   },
   {
     id: "lms",
-    name: "LMS Zone",
-    vlan: "VLAN 30",
+    name: "LMS",
+    purpose: "Learning Management System",
     color: "cyan",
     role: "Learning Management System and course content delivery.",
     items: [
@@ -110,10 +110,10 @@ const futureZones = [
   },
   {
     id: "prod",
-    name: "Production Zone",
-    vlan: "VLAN 40",
+    name: "Production",
+    purpose: "Client Delivery / Lab Operations",
     color: "pink",
-    role: "Production-like environment for simulations and compliance labs.",
+    role: "Client delivery and lab operations environment.",
     items: [
       { name: "Active Directory", desc: "& DNS" },
       { name: "File / App Server", desc: "" },
@@ -123,8 +123,8 @@ const futureZones = [
   },
   {
     id: "vpn",
-    name: "VPN Access Zone",
-    vlan: "VLAN 60",
+    name: "VPN Access",
+    purpose: "Remote Access",
     color: "red",
     role: "High-capacity secure remote access into the lab.",
     items: [
@@ -135,8 +135,8 @@ const futureZones = [
   },
   {
     id: "range",
-    name: "Cyber Range (OpenStack)",
-    vlan: "VLAN 50",
+    name: "OpenStack Cyber Range",
+    purpose: "Cyber Range Environment",
     color: "orange",
     role: "Isolated, disposable cyber ranges for Red/Blue, malware, and advanced labs.",
     items: [
@@ -177,7 +177,7 @@ export default function CyberLabMap() {
         <div>
           <h2 className="cl-map-title">TCEcure Cyber Lab Network</h2>
           <p className="cl-map-subtitle">
-            Modern, data-center-inspired architecture with segmented zones for Dev, LMS, Production, VPN, and Cyber Range.
+            Modern, data-center-inspired architecture with segmented zones for Alpha Centauri Sandbox, LMS, Production, VPN, and Cyber Range.
           </p>
         </div>
         <div className="cl-map-toggle">
@@ -235,7 +235,7 @@ export default function CyberLabMap() {
               >
                 <div className="cl-zone-label">
                   <span className="cl-zone-name">{zone.name}</span>
-                  <span className="cl-zone-vlan-tag">{zone.vlan}</span>
+                  <span className="cl-zone-vlan-tag">{zone.purpose}</span>
                 </div>
                 <div className="cl-zone-nodes">
                   {zone.items.map((item, idx) => (
@@ -259,7 +259,7 @@ export default function CyberLabMap() {
               >
                 <div className="cl-zone-label">
                   <span className="cl-zone-name">{zone.name}</span>
-                  <span className="cl-zone-vlan-tag">{zone.vlan}</span>
+                  <span className="cl-zone-vlan-tag">{zone.purpose}</span>
                 </div>
                 <div className="cl-zone-nodes">
                   {zone.items.map((item, idx) => (
