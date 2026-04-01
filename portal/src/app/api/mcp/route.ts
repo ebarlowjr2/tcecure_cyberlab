@@ -40,9 +40,13 @@ export async function POST(req: NextRequest) {
       payload,
     };
 
+    const portalSecret = process.env.PORTAL_SECRET || process.env.NEXTAUTH_SECRET || "";
     const mcpRes = await fetch(`${mcpUrl}/tools/${action}`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${portalSecret}`,
+      },
       body: JSON.stringify(mcpPayload),
     });
 

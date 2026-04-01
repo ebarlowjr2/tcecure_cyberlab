@@ -68,9 +68,13 @@ export async function POST(req: NextRequest) {
         payload: intent.payload,
       };
 
+      const portalSecret = process.env.PORTAL_SECRET || process.env.NEXTAUTH_SECRET || "";
       const mcpRes = await fetch(mcpUrl + "/tools/" + intent.action, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${portalSecret}`,
+        },
         body: JSON.stringify(mcpPayload),
       });
 
