@@ -92,6 +92,8 @@ async def reset_pod(req: ToolRequest, _auth: HTTPAuthorizationCredentials = Depe
     try:
         awx_result = await call_awx(TOOL_TEMPLATES["reset_pod"], {"pod_id": pod_id})
         return {"status": "launched", "tool": "reset_pod", "pod_id": pod_id, **awx_result}
+    except HTTPException as e:
+        raise HTTPException(status_code=502, detail=f"AWX error: {e.detail}")
     except httpx.HTTPError as e:
         raise HTTPException(status_code=502, detail=f"AWX connection error: {str(e)}")
 
@@ -109,6 +111,8 @@ async def reseed_lab(req: ToolRequest, _auth: HTTPAuthorizationCredentials = Dep
     try:
         awx_result = await call_awx(TOOL_TEMPLATES["reseed_lab"], {"pod_id": pod_id, "lab": lab or ""})
         return {"status": "launched", "tool": "reseed_lab", "pod_id": pod_id, "lab": lab, **awx_result}
+    except HTTPException as e:
+        raise HTTPException(status_code=502, detail=f"AWX error: {e.detail}")
     except httpx.HTTPError as e:
         raise HTTPException(status_code=502, detail=f"AWX connection error: {str(e)}")
 
@@ -126,6 +130,8 @@ async def verify_lab(req: ToolRequest, _auth: HTTPAuthorizationCredentials = Dep
     try:
         awx_result = await call_awx(TOOL_TEMPLATES["verify_lab"], {"pod_id": pod_id, "lab": lab or ""})
         return {"status": "launched", "tool": "verify_lab", "pod_id": pod_id, "lab": lab, **awx_result}
+    except HTTPException as e:
+        raise HTTPException(status_code=502, detail=f"AWX error: {e.detail}")
     except httpx.HTTPError as e:
         raise HTTPException(status_code=502, detail=f"AWX connection error: {str(e)}")
 

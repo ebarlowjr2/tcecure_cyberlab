@@ -40,7 +40,10 @@ export async function POST(req: NextRequest) {
       payload,
     };
 
-    const portalSecret = process.env.PORTAL_SECRET || process.env.NEXTAUTH_SECRET || "";
+    const portalSecret = process.env.PORTAL_SECRET;
+    if (!portalSecret) {
+      return NextResponse.json({ error: "PORTAL_SECRET not configured" }, { status: 500 });
+    }
     const mcpRes = await fetch(`${mcpUrl}/tools/${action}`, {
       method: "POST",
       headers: {
