@@ -11,6 +11,7 @@ export const PERMISSIONS = {
 export const TOOL_PERMISSION_MAP: Record<string, string> = {
   reset_pod: PERMISSIONS.RESET_POD,
   reseed_lab: PERMISSIONS.RESEED_LAB,
+  verify_lab: PERMISSIONS.VIEW_LOGS,
 };
 
 export function hasPermission(userPermissions: string[], required: string): boolean {
