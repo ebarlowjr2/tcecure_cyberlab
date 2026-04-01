@@ -5,8 +5,8 @@ import { canAccessTool, PERMISSIONS, hasPermission } from "@/lib/permissions";
 import { logAudit } from "@/lib/audit";
 
 const TOOL_PATTERNS: Record<string, RegExp> = {
-  reset_pod: /reset\s+pod\s*(\w+)/i,
-  reseed_lab: /reseed\s+pod\s*(\w+)\s+(?:with\s+)?(\w+)/i,
+  reset_pod: /reset\s+(pod\s*\w+)/i,
+  reseed_lab: /reseed\s+(pod\s*\w+)\s+(?:with\s+)?(\w+)/i,
 };
 
 function parseIntent(message: string): { action: string; payload: Record<string, string> } | null {

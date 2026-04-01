@@ -11,7 +11,9 @@ app = FastAPI(title="CyberLab MCP Server", version="2.1")
 
 AWX_URL = os.getenv("AWX_URL", "http://192.168.1.60:30080/api/v2")
 AWX_TOKEN = os.getenv("AWX_TOKEN", "")
-PORTAL_SECRET = os.getenv("PORTAL_SECRET", "cyberlab-portal-secret-key-change-in-production-2026")
+PORTAL_SECRET = os.getenv("PORTAL_SECRET")
+if not PORTAL_SECRET:
+    raise RuntimeError("PORTAL_SECRET environment variable must be set")
 
 security = HTTPBearer()
 
