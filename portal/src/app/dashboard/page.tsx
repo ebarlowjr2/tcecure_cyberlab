@@ -66,10 +66,39 @@ function LabActionPanel() {
   );
 }
 
+interface HealthStatus {
+  mcp: { status: string; detail?: string };
+  openhands: { status: string; detail?: string };
+}
+
+function useHealthStatus() {
+  const [health, setHealth] = useState<HealthStatus | null>(null);
+
+  useEffect(() => {
+    function check() {
+      fetch("/api/health")
+        .then((r) => r.json())
+        .then(setHealth)
+        .catch(() => setHealth(null));
+    }
+    check();
+    const interval = setInterval(check, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return health;
+}
+
+function StatusDot({ status }: { status: string }) {
+  const color = status === "connected" ? "bg-emerald-500" : status === "error" ? "bg-amber-500" : "bg-red-500";
+  return <div className={`w-2 h-2 rounded-full ${color} ${status === "connected" ? "animate-pulse" : ""}`} />;
+}
+
 export default function DashboardPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const role = (session?.user as any)?.role;
+  const health = useHealthStatus();
 
   useEffect(() => {
     if (status === "authenticated" && role === "student") {
@@ -89,7 +118,7 @@ export default function DashboardPage() {
             <p className="text-gray-400 mt-1">Welcome back, {session?.user?.name}</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-lg bg-emerald-500/10 flex items-center justify-center">
@@ -106,12 +135,29 @@ export default function DashboardPage() {
                 <div className="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center">
                   <svg className="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" /></svg>
                 </div>
-                <div>
-                  <p className="text-gray-400 text-sm">MCP Server</p>
-                  <p className="text-white font-semibold">Connected</p>
+                <div className="flex items-center gap-2">
+                  <div>
+                    <p className="text-gray-400 text-sm">MCP Server</p>
+                    <p className="text-white font-semibold capitalize">{health?.mcp?.status || "Checking..."}</p>
+                  </div>
+                  {health?.mcp && <StatusDot status={health.mcp.status} />}
                 </div>
               </div>
             </div>
+            <a href="/ide" className="bg-gray-900 border border-gray-800 rounded-xl p-6 hover:border-cyan-500/30 transition-colors block">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-lg bg-cyan-500/10 flex items-center justify-center">
+                  <svg className="w-6 h-6 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div>
+                    <p className="text-gray-400 text-sm">AI IDE</p>
+                    <p className="text-white font-semibold capitalize">{health?.openhands?.status || "Checking..."}</p>
+                  </div>
+                  {health?.openhands && <StatusDot status={health.openhands.status} />}
+                </div>
+              </div>
+            </a>
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-lg bg-purple-500/10 flex items-center justify-center">
