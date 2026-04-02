@@ -13,7 +13,7 @@ export default withAuth(
       }
     }
 
-    if (path.startsWith("/ai")) {
+    if (path.startsWith("/ai") || path.startsWith("/ide")) {
       const perms = (token?.permissions as string[]) || [];
       if (!perms.includes("ai.chat.access") && !perms.includes("system.full_access")) {
         return NextResponse.redirect(new URL("/dashboard", req.url));
@@ -30,5 +30,5 @@ export default withAuth(
 );
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/admin/:path*", "/ai/:path*", "/student/:path*"],
+  matcher: ["/dashboard/:path*", "/admin/:path*", "/ai/:path*", "/ide/:path*", "/student/:path*"],
 };
