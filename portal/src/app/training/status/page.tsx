@@ -85,7 +85,7 @@ export default function TrainingStatusPage() {
         }
         const data = await res.json();
         setLabData(data);
-        if (data.error) setError(data.error);
+        setError(data.error || null);
       } catch (err: unknown) {
         const message = err instanceof Error ? err.message : "Unknown error";
         setError(message);
