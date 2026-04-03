@@ -34,6 +34,13 @@ export async function GET() {
 
     const data = await mcpRes.json();
 
+    if (!mcpRes.ok) {
+      return NextResponse.json(
+        { error: data?.detail || "MCP error", detail: data },
+        { status: mcpRes.status }
+      );
+    }
+
     // If student, filter to only their assigned pod(s)
     // For now, students see all pods - pod scoping will be
     // enforced once enrollment assigns pod_id to students
