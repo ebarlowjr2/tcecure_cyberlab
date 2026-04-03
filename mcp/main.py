@@ -176,37 +176,29 @@ async def lab_status(_auth: HTTPAuthorizationCredentials = Depends(verify_portal
             last_run = None
 
             if r.is_success:
-                data = r.json()
+                try:
+                    data = r.json()
+                except (json.JSONDecodeError, ValueError):
+                    data = {}
                 results = data.get("results", [])
                 if results:
                     job = results[0]
                     last_run = job.get("finished")
                     job_id = job.get("id")
 
-                    # Try to get the job's artifacts (auto-verify.json)
-                    artifact_r = await client.get(
-                        f"{AWX_URL}/jobs/{job_id}/stdout/",
-                        headers=get_awx_headers(),
-                        params={"format": "json"},
-                    )
-                    if artifact_r.is_success:
-                        try:
-                            stdout_data = artifact_r.json()
-                            # Parse the structured output from verify playbook
-                            # The output contains per-pod lab results
-                            content = stdout_data.get("content", "") if isinstance(stdout_data, dict) else str(stdout_data)
-                            # Try to extract JSON results from job artifacts
-                            artifacts_r = await client.get(
-                                f"{AWX_URL}/jobs/{job_id}/",
-                                headers=get_awx_headers(),
-                            )
-                            if artifacts_r.is_success:
-                                job_detail = artifacts_r.json()
-                                artifacts = job_detail.get("artifacts", {})
-                                if artifacts:
-                                    pods = artifacts
-                        except (json.JSONDecodeError, ValueError):
-                            pass
+                    # Fetch job detail to extract artifacts
+                    try:
+                        artifacts_r = await client.get(
+                            f"{AWX_URL}/jobs/{job_id}/",
+                            headers=get_awx_headers(),
+                        )
+                        if artifacts_r.is_success:
+                            job_detail = artifacts_r.json()
+                            artifacts = job_detail.get("artifacts", {})
+                            if artifacts:
+                                pods = artifacts
+                    except (json.JSONDecodeError, ValueError):
+                        pass
 
             # If we couldn't get real data from AWX, return the structure
             # with all labs marked as incomplete so the UI still renders
