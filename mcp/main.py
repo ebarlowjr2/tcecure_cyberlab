@@ -9,7 +9,7 @@ import datetime
 
 app = FastAPI(title="CyberLab MCP Server", version="2.2")
 
-AWX_URL = os.getenv("AWX_URL", "http://192.168.1.60:30080/api/v2")
+AWX_URL = os.getenv("AWX_URL", "http://192.168.1.103:30080/api/v2")
 AWX_TOKEN = os.getenv("AWX_TOKEN", "")
 PORTAL_SECRET = os.getenv("PORTAL_SECRET")
 if not PORTAL_SECRET:
@@ -203,7 +203,7 @@ async def lab_status(_auth: HTTPAuthorizationCredentials = Depends(verify_portal
             # If we couldn't get real data from AWX, return the structure
             # with all labs marked as incomplete so the UI still renders
             if not pods:
-                for i in range(1, 11):
+                for i in range(1, 21):
                     pad = f"{i:02d}"
                     pod_key = f"pod{pad}"
                     pod_labs: dict = {}
@@ -224,7 +224,7 @@ async def lab_status(_auth: HTTPAuthorizationCredentials = Depends(verify_portal
     except httpx.HTTPError as e:
         # If AWX is unreachable, return empty structure so UI still works
         pods = {}
-        for i in range(1, 11):
+        for i in range(1, 21):
             pad = f"{i:02d}"
             pod_key = f"pod{pad}"
             pod_labs = {}
