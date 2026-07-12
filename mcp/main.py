@@ -7,7 +7,7 @@ import os
 import json
 import datetime
 
-app = FastAPI(title="CyberLab MCP Server", version="2.4")
+app = FastAPI(title="CyberLab MCP Server", version="2.5")
 
 AWX_URL = os.getenv("AWX_URL", "http://192.168.1.103:30080/api/v2")
 AWX_TOKEN = os.getenv("AWX_TOKEN", "")
@@ -34,6 +34,8 @@ VERIFY_TEMPLATES = {
     "IA": 16,
     "SI": 19,
     "SC": 22,
+    "MP": 26,
+    "PE": 29,
 }
 
 
@@ -150,7 +152,7 @@ async def lab_status(_auth: HTTPAuthorizationCredentials = Depends(verify_portal
     Queries AWX for the most recent completed verify job and returns
     the structured lab completion data for all pods.
     """
-    # Lab definitions for AC, IA, SI, and SC courses
+    # Lab definitions for CMMC Level 1 courses
     ac_labs = [
         "L1.1", "L1.2", "L1.3",
         "L2.1", "L2.2", "L2.3",
@@ -174,6 +176,14 @@ async def lab_status(_auth: HTTPAuthorizationCredentials = Depends(verify_portal
         "SC-M2-L1", "SC-M2-L2", "SC-M2-L3",
         "SC-M3-L1", "SC-M3-L2", "SC-M3-L3",
         "SC-M4-L1", "SC-M4-L2", "SC-M4-L3",
+    ]
+    mp_labs = [
+        "MP-M1-L1", "MP-M1-L2", "MP-M1-L3",
+    ]
+    pe_labs = [
+        "PE-M1-L1", "PE-M1-L2",
+        "PE-M2-L1", "PE-M2-L2",
+        "PE-M3-L1", "PE-M3-L2",
     ]
 
     try:
@@ -238,6 +248,10 @@ async def lab_status(_auth: HTTPAuthorizationCredentials = Depends(verify_portal
                         pod_labs[lab] = {"completed": False, "reason": "Not yet verified", "course": "SI"}
                     for lab in sc_labs:
                         pod_labs[lab] = {"completed": False, "reason": "Not yet verified", "course": "SC"}
+                    for lab in mp_labs:
+                        pod_labs[lab] = {"completed": False, "reason": "Not yet verified", "course": "MP"}
+                    for lab in pe_labs:
+                        pod_labs[lab] = {"completed": False, "reason": "Not yet verified", "course": "PE"}
                     pods[pod_key] = pod_labs
 
             return {
@@ -248,6 +262,8 @@ async def lab_status(_auth: HTTPAuthorizationCredentials = Depends(verify_portal
                     "IA": {"name": "Identification & Authentication", "labs": ia_labs},
                     "SI": {"name": "System & Information Integrity", "labs": si_labs},
                     "SC": {"name": "System & Communications Protection", "labs": sc_labs},
+                    "MP": {"name": "Media Protection", "labs": mp_labs},
+                    "PE": {"name": "Physical Protection", "labs": pe_labs},
                 },
             }
     except httpx.HTTPError as e:
@@ -265,6 +281,10 @@ async def lab_status(_auth: HTTPAuthorizationCredentials = Depends(verify_portal
                 pod_labs[lab] = {"completed": False, "reason": "AWX unreachable", "course": "SI"}
             for lab in sc_labs:
                 pod_labs[lab] = {"completed": False, "reason": "AWX unreachable", "course": "SC"}
+            for lab in mp_labs:
+                pod_labs[lab] = {"completed": False, "reason": "AWX unreachable", "course": "MP"}
+            for lab in pe_labs:
+                pod_labs[lab] = {"completed": False, "reason": "AWX unreachable", "course": "PE"}
             pods[pod_key] = pod_labs
         return {
             "pods": pods,
@@ -275,13 +295,15 @@ async def lab_status(_auth: HTTPAuthorizationCredentials = Depends(verify_portal
                 "IA": {"name": "Identification & Authentication", "labs": ia_labs},
                 "SI": {"name": "System & Information Integrity", "labs": si_labs},
                 "SC": {"name": "System & Communications Protection", "labs": sc_labs},
+                "MP": {"name": "Media Protection", "labs": mp_labs},
+                "PE": {"name": "Physical Protection", "labs": pe_labs},
             },
         }
 
 
 @app.get("/health")
 async def health():
-    return {"status": "ok", "version": "2.4", "role_enforcement": True, "auth": True}
+    return {"status": "ok", "version": "2.5", "role_enforcement": True, "auth": True}
 
 
 @app.get("/tools")
