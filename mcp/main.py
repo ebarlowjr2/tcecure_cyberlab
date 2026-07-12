@@ -34,8 +34,8 @@ VERIFY_TEMPLATES = {
     "IA": 16,
     "SI": 19,
     "SC": 22,
-    "MP": 26,
-    "PE": 29,
+    "MP": 28,
+    "PE": 31,
 }
 
 
