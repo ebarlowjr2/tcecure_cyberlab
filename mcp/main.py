@@ -7,9 +7,9 @@ import os
 import json
 import datetime
 
-app = FastAPI(title="CyberLab MCP Server", version="2.2")
+app = FastAPI(title="CyberLab MCP Server", version="2.3")
 
-AWX_URL = os.getenv("AWX_URL", "http://192.168.1.60:30080/api/v2")
+AWX_URL = os.getenv("AWX_URL", "http://192.168.1.103:30080/api/v2")
 AWX_TOKEN = os.getenv("AWX_TOKEN", "")
 PORTAL_SECRET = os.getenv("PORTAL_SECRET")
 if not PORTAL_SECRET:
@@ -24,9 +24,15 @@ ROLE_PERMISSIONS = {
 }
 
 TOOL_TEMPLATES = {
-    "reset_pod": 10,
-    "reseed_lab": 11,
-    "verify_lab": 12,
+    "reset_pod": 9,
+    "reseed_lab": 12,
+    "verify_lab": 13,
+}
+
+VERIFY_TEMPLATES = {
+    "AC": 13,
+    "IA": 16,
+    "SI": 19,
 }
 
 
@@ -143,7 +149,7 @@ async def lab_status(_auth: HTTPAuthorizationCredentials = Depends(verify_portal
     Queries AWX for the most recent completed verify job and returns
     the structured lab completion data for all pods.
     """
-    # Lab definitions for AC and IA courses
+    # Lab definitions for AC, IA, and SI courses
     ac_labs = [
         "L1.1", "L1.2", "L1.3",
         "L2.1", "L2.2", "L2.3",
@@ -156,54 +162,64 @@ async def lab_status(_auth: HTTPAuthorizationCredentials = Depends(verify_portal
         "M3-L1", "M3-L2", "M3-L3",
         "M4-L1", "M4-L2", "M4-L3",
     ]
+    si_labs = [
+        "SI-M1-L1", "SI-M1-L2", "SI-M1-L3",
+        "SI-M2-L1", "SI-M2-L2", "SI-M2-L3",
+        "SI-M3-L1", "SI-M3-L2", "SI-M3-L3",
+        "SI-M4-L1", "SI-M4-L2", "SI-M4-L3",
+    ]
 
     try:
         async with httpx.AsyncClient(timeout=30.0) as client:
-            # Get latest completed verify job
-            verify_template_id = TOOL_TEMPLATES.get("verify_lab", 12)
-            r = await client.get(
-                f"{AWX_URL}/jobs/",
-                headers=get_awx_headers(),
-                params={
-                    "job_template": verify_template_id,
-                    "status": "successful",
-                    "order_by": "-finished",
-                    "page_size": 1,
-                },
-            )
-
             pods: dict = {}
             last_run = None
 
-            if r.is_success:
-                try:
-                    data = r.json()
-                except (json.JSONDecodeError, ValueError):
-                    data = {}
-                results = data.get("results", [])
-                if results:
-                    job = results[0]
-                    last_run = job.get("finished")
-                    job_id = job.get("id")
+            # Query each family's verify template for latest results
+            for family, template_id in VERIFY_TEMPLATES.items():
+                r = await client.get(
+                    f"{AWX_URL}/jobs/",
+                    headers=get_awx_headers(),
+                    params={
+                        "job_template": template_id,
+                        "status": "successful",
+                        "order_by": "-finished",
+                        "page_size": 1,
+                    },
+                )
 
-                    # Fetch job detail to extract artifacts
+                if r.is_success:
                     try:
-                        artifacts_r = await client.get(
-                            f"{AWX_URL}/jobs/{job_id}/",
-                            headers=get_awx_headers(),
-                        )
-                        if artifacts_r.is_success:
-                            job_detail = artifacts_r.json()
-                            artifacts = job_detail.get("artifacts", {})
-                            if artifacts:
-                                pods = artifacts
+                        data = r.json()
                     except (json.JSONDecodeError, ValueError):
-                        pass
+                        data = {}
+                    results = data.get("results", [])
+                    if results:
+                        job = results[0]
+                        finished = job.get("finished")
+                        if finished and (not last_run or finished > last_run):
+                            last_run = finished
+                        job_id = job.get("id")
+
+                        try:
+                            artifacts_r = await client.get(
+                                f"{AWX_URL}/jobs/{job_id}/",
+                                headers=get_awx_headers(),
+                            )
+                            if artifacts_r.is_success:
+                                job_detail = artifacts_r.json()
+                                artifacts = job_detail.get("artifacts", {})
+                                if artifacts:
+                                    for pod_key, pod_data in artifacts.items():
+                                        if pod_key not in pods:
+                                            pods[pod_key] = {}
+                                        pods[pod_key].update(pod_data)
+                        except (json.JSONDecodeError, ValueError):
+                            pass
 
             # If we couldn't get real data from AWX, return the structure
             # with all labs marked as incomplete so the UI still renders
             if not pods:
-                for i in range(1, 11):
+                for i in range(1, 21):
                     pad = f"{i:02d}"
                     pod_key = f"pod{pad}"
                     pod_labs: dict = {}
@@ -211,6 +227,8 @@ async def lab_status(_auth: HTTPAuthorizationCredentials = Depends(verify_portal
                         pod_labs[lab] = {"completed": False, "reason": "Not yet verified", "course": "AC"}
                     for lab in ia_labs:
                         pod_labs[lab] = {"completed": False, "reason": "Not yet verified", "course": "IA"}
+                    for lab in si_labs:
+                        pod_labs[lab] = {"completed": False, "reason": "Not yet verified", "course": "SI"}
                     pods[pod_key] = pod_labs
 
             return {
@@ -219,12 +237,13 @@ async def lab_status(_auth: HTTPAuthorizationCredentials = Depends(verify_portal
                 "courses": {
                     "AC": {"name": "Access Control", "labs": ac_labs},
                     "IA": {"name": "Identification & Authentication", "labs": ia_labs},
+                    "SI": {"name": "System & Information Integrity", "labs": si_labs},
                 },
             }
     except httpx.HTTPError as e:
         # If AWX is unreachable, return empty structure so UI still works
         pods = {}
-        for i in range(1, 11):
+        for i in range(1, 21):
             pad = f"{i:02d}"
             pod_key = f"pod{pad}"
             pod_labs = {}
@@ -232,6 +251,8 @@ async def lab_status(_auth: HTTPAuthorizationCredentials = Depends(verify_portal
                 pod_labs[lab] = {"completed": False, "reason": "AWX unreachable", "course": "AC"}
             for lab in ia_labs:
                 pod_labs[lab] = {"completed": False, "reason": "AWX unreachable", "course": "IA"}
+            for lab in si_labs:
+                pod_labs[lab] = {"completed": False, "reason": "AWX unreachable", "course": "SI"}
             pods[pod_key] = pod_labs
         return {
             "pods": pods,
@@ -240,13 +261,14 @@ async def lab_status(_auth: HTTPAuthorizationCredentials = Depends(verify_portal
             "courses": {
                 "AC": {"name": "Access Control", "labs": ac_labs},
                 "IA": {"name": "Identification & Authentication", "labs": ia_labs},
+                "SI": {"name": "System & Information Integrity", "labs": si_labs},
             },
         }
 
 
 @app.get("/health")
 async def health():
-    return {"status": "ok", "version": "2.2", "role_enforcement": True, "auth": True}
+    return {"status": "ok", "version": "2.3", "role_enforcement": True, "auth": True}
 
 
 @app.get("/tools")
