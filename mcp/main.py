@@ -38,6 +38,56 @@ VERIFY_TEMPLATES = {
     "PE": 31,
 }
 
+# Staged CyDeploy Community Edition labs. These are supplemental to the six
+# active families and are deliberately inert: they are published under
+# "staged_courses" (which the UI does not render), they have no verify template
+# yet, and they are excluded from completion percentages and auto-advance.
+# Activation is gated by docs/cydeploy/CYDEPLOY-GO-LIVE.md in crc-awx-labops.
+STAGED_COURSES = {
+    "SI-CYDEPLOY": {
+        "name": "System & Information Integrity — CyDeploy (staged)",
+        "family": "SI",
+        "verify_template_id": None,
+        "published": False,
+        "active": False,
+        "visible_to_students": False,
+        "included_in_completion_percentage": False,
+        "included_in_auto_advance": False,
+        "labs": [
+            {"id": "SI-M5-L1", "title": "CyDeploy Asset Discovery"},
+            {"id": "SI-M5-L2", "title": "Configuration & Security Findings"},
+            {"id": "SI-M5-L3", "title": "Change Impact Comparison"},
+        ],
+    },
+    "SC-CYDEPLOY": {
+        "name": "System & Communications Protection — CyDeploy (staged)",
+        "family": "SC",
+        "verify_template_id": None,
+        "published": False,
+        "active": False,
+        "visible_to_students": False,
+        "included_in_completion_percentage": False,
+        "included_in_auto_advance": False,
+        "labs": [
+            {"id": "SC-M5-L1", "title": "Network Dependency / Firewall Change Analysis"},
+        ],
+    },
+}
+
+
+def staged_courses_payload():
+    """Return the staged catalog, omitting any course that has been activated.
+
+    An activated course must be moved into the active `courses` structure and
+    given a verify template id; until then it is reported here only so the
+    catalog is discoverable by instructors and tooling.
+    """
+    return {
+        key: course
+        for key, course in STAGED_COURSES.items()
+        if not course["active"]
+    }
+
 
 class UserContext(BaseModel):
     id: str
@@ -265,6 +315,7 @@ async def lab_status(_auth: HTTPAuthorizationCredentials = Depends(verify_portal
                     "MP": {"name": "Media Protection", "labs": mp_labs},
                     "PE": {"name": "Physical Protection", "labs": pe_labs},
                 },
+                "staged_courses": staged_courses_payload(),
             }
     except httpx.HTTPError as e:
         # If AWX is unreachable, return empty structure so UI still works
@@ -298,6 +349,7 @@ async def lab_status(_auth: HTTPAuthorizationCredentials = Depends(verify_portal
                 "MP": {"name": "Media Protection", "labs": mp_labs},
                 "PE": {"name": "Physical Protection", "labs": pe_labs},
             },
+            "staged_courses": staged_courses_payload(),
         }
 
 
