@@ -42,7 +42,7 @@ export interface PodProgress {
   trackerUrl: string;
 }
 
-export const TRACKER_BASE_URL = "https://training.status.tcecure.com";
+export const TRACKER_BASE_URL = "https://training.digitalrcc.com";
 
 export function isValidPodId(pod: string): boolean {
   return /^(0[1-9]|1[0-9]|20)$/.test(pod);
